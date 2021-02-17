@@ -11,29 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     name: Build openwrt-xray
     steps:
-      - name: Build for aarch64_cortex-a53
+      - name: Show workflow information
         env:
           WORKSPACE: ${{ github.workspace }}
-        uses: woniuzfb/openwrt-xray/.github/targets/aarch64_cortex-a53@v1
-        with:
-          compress-goproxy: 'n'
-          exclude-assets: 'n'
-          compress-upx: 'y'
-          compatibility-mode: 'n'
-      - name: Build for aarch64_generic
-        env:
-          WORKSPACE: ${{ github.workspace }}
-        uses: woniuzfb/openwrt-xray/.github/targets/aarch64_generic@v1
-        with:
-          compress-goproxy: 'n'
-          exclude-assets: 'n'
-          compress-upx: 'y'
-          compatibility-mode: 'n'
+        run: |
+          echo "VERSION=$(find ./ -type f -name "Makefile" | xargs grep "PKG_VERSION" "Makefile")" >> $GITHUB_ENV
+          echo "::set-output name=ASSET_NAME::$_NAME"
+          echo "ASSET_NAME=$_NAME" >> $GITHUB_ENV
       - name: Build for x86_64
         env:
           WORKSPACE: ${{ github.workspace }}
         uses: woniuzfb/openwrt-xray/.github/targets/x86_64@v1
-        id: last_build
         with:
           compress-goproxy: 'n'
           exclude-assets: 'n'
