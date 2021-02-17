@@ -23,6 +23,7 @@ jobs:
       - name: Generate release tag
         run: |
           find ./ -type f -name "*.ipk" -exec ls -lh {} \;
+          cd -
       - name: Release and Upload Assets
         uses: softprops/action-gh-release@v1
         with:
