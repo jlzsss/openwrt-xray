@@ -21,13 +21,15 @@ jobs:
           exclude-assets: 'n'
           compress-upx: 'y'
           compatibility-mode: 'n'
-      - name: Copy Bin Files
+      - name: Generate release tag
         run: |
-          find ./ -type f -name "*xray*.ipk" -exec cp {} "${{ github.workspace }}" \;
-          find "${{ github.workspace }}" -type f -name "*.ipk" -exec ls -lh {} \;
+          touch release.txt
+          echo "xray*" >> release.txt
       - name: Release and Upload Assets
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: v*.*.*
+          body_path: release.txt
           files: '*.ipk'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
