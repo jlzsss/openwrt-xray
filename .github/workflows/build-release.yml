@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-20.04
     name: Build openwrt-xray
     steps:
+      - name: Create Directories
+        run: |
+          echo "SDK_HOME=$(mktemp -d)" >> $GITHUB_ENV
       - name: Build for x86_64
         env:
           WORKSPACE: ${{ github.workspace }}
@@ -23,8 +26,8 @@ jobs:
           compatibility-mode: 'n'
       - name: Copy Bin Files
         run: |
-           find "/bin/packages/" -type f -name "*xray*.ipk" -exec cp {} "${{ github.workspace }}" \;
-           find "${{ github.workspace }}" -type f -name "*.ipk" -exec ls -lh {} \;
+          find "$SDK_HOME/bin/" -type f -name "*xray*.ipk" -exec cp {} "${{ github.workspace }}" \;
+          find "${{ github.workspace }}" -type f -name "*.ipk" -exec ls -lh {} \;
       - name: Release and Upload Assets
         uses: softprops/action-gh-release@v1
         with:
