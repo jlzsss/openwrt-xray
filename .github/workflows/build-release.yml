@@ -20,15 +20,16 @@ jobs:
           exclude-assets: 'n'
           compress-upx: 'y'
           compatibility-mode: 'n'
-      - name: Generate release tag
+      - name: Copy Bin Files
         run: |
-          find ./ -type f -name "*.ipk" -exec ls -lh {} \;
-          cd -
-      - name: Release and Upload Assets
-        uses: softprops/action-gh-release@v1
+          find ./ -type f -name "*xray*.ipk" -exec cp {} "${{ github.workspace }}" \;
+          find "${{ github.workspace }}" -type f -name "*.ipk" -exec ls -lh {} \;
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
         with:
-          files: '*.ipk'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: "*.ipk"
+          tag: ${{ github.ref }}
+          file_glob: true
       - name: Done
         run: echo "Build complete - ${{ steps.last_build.outputs.date }}"
