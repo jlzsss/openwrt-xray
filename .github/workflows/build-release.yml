@@ -15,7 +15,6 @@ jobs:
         env:
           WORKSPACE: ${{ github.workspace }}
         uses: woniuzfb/openwrt-xray/.github/targets/x86_64@v1
-        id: last_build
         with:
           compress-goproxy: 'n'
           exclude-assets: 'n'
@@ -23,13 +22,10 @@ jobs:
           compatibility-mode: 'n'
       - name: Generate release tag
         run: |
-          touch release.txt
-          echo "xray*" >> release.txt
+          find ./ -type f -name "*.ipk" -exec ls -lh {} \;
       - name: Release and Upload Assets
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v*.*.*
-          body_path: release.txt
           files: '*.ipk'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
