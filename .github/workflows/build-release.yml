@@ -27,11 +27,15 @@ jobs:
           exclude-assets: 'n'
           compress-upx: 'y'
           compatibility-mode: 'n'
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: '*.ipk'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       - name: Copy Bin Files
+         run: |
+           find "$SDK_HOME/bin/" -type f -name "*xray*.ipk" -exec cp {} "${{ github.workspace }}" \;
+           find "${{ github.workspace }}" -type f -name "*.ipk" -exec ls -lh {} \;
+       - name: Release and Upload Assets
+         uses: softprops/action-gh-release@v1
+         with:
+           files: '*.ipk'
+         env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Done
         run: echo "Build complete - ${{ steps.last_build.outputs.date }}"
