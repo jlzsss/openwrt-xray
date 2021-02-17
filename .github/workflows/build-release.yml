@@ -22,10 +22,8 @@ jobs:
           compress-upx: 'y'
           compatibility-mode: 'n'
       - name: Copy Bin Files
-        env:
-          WORKSPACE: ${{ github.workspace }}
         run: |
-           find "bin/packages/" -type f -name "*xray*.ipk" -exec cp {} "${{ github.workspace }}" \;
+           find "/bin/packages/" -type f -name "*xray*.ipk" -exec cp {} "${{ github.workspace }}" \;
            find "${{ github.workspace }}" -type f -name "*.ipk" -exec ls -lh {} \;
       - name: Release and Upload Assets
         uses: softprops/action-gh-release@v1
